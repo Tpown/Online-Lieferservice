@@ -1,5 +1,6 @@
 * {
     font-family: 'Open Sans', sans-serif;
+    color: white;
 }
 
 body {
@@ -9,14 +10,14 @@ body {
 }
 
 ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+list-style-type: disc;
+font-weight: bold;
+color: white;
+
   }
   
   li {
-      float: right; 
+      float: left;
   }
 
   li a {
@@ -33,17 +34,29 @@ ul {
   }
 
   .top-navbar{
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      margin-top: 1em;
+
+      float: right;
       padding-right: 10em;
+  }
+
+  .menu{
+      float: left;
+      margin-left: 5em;
   }
 
 #logo {
   color: white;
   background: black;
   width: 100px;
-  height: 100px;  
+  height: 100px;
   text-align: right;
   margin-left: 20px;
-  margin-top: 5px;
+  margin-top: 20px;
 }
   
  
