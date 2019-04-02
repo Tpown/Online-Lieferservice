@@ -1,0 +1,49 @@
+* {
+    font-family: 'Open Sans', sans-serif;
+}
+
+body {
+    background-image: url(../resources/img/sushiplatte.jpg);
+    background-size: 100%;
+
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  
+  li {
+      float: right; 
+  }
+
+  li a {
+      display: block;
+      padding: 10px;
+      margin-left: 5em;
+      color: white;
+      text-decoration: none;
+  }
+
+  li a:hover {
+      border-bottom: 1px solid white;
+      border-width: 2px;
+  }
+
+  .top-navbar{
+      padding-right: 10em;
+  }
+
+#logo {
+  color: white;
+  background: black;
+  width: 100px;
+  height: 100px;  
+  text-align: right;
+  margin-left: 20px;
+  margin-top: 5px;
+}
+  
+ 
