@@ -1,27 +1,56 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8 ohne BOM" />
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-        <title> Sushi Lieferservice</title>
-        <link rel="stylesheet" type="text/css" href="style/index.css">
-    </head>
 
-    <body>
-        <div class="top-navbar">
-                <li> <a href="order-status.html">Lieferstatus</a></li>
-                <li> <a href="menu.html">Speisekarte</a></li>
-                <li> <a href="contact.html">Kontakt</a></li>
-                <li> <a href="index.html">Über uns</a></li>
-        </div>
-        <div id="logo"> Sushi Lieferservice</div>
+<head>
+    <meta charset="UTF-8" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <title> Sushi Lieferservice</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="style/index.css">
+</head>
 
-        <div class="menu">
-            <li>Pizza Margherita</li>
-            <li>Pizza Schinken</li>
-            <li>Pizza Salami</li>
+<body>
+
+    <div class="top-navbar">
+        <ul>
+            <li> <a href="index.html">Über uns</a></li>
+            <li> <a href="menu.html" class="active-menu">Speisekarte</a></li>
+            <li> <a href="contact.html">Kontakt</a></li>
+            <li> <a href="order-status.html">Lieferstatus</a></li>
+        </ul>
+    </div>
+
+    <div id="logo"> Sushi Lieferservice</div>
+
+    <div class="card-container">
+        <div class="card">
+            <img src="resources/img/sushi-onion.jpg" class="card-img-top" alt="Link is broken">
+            <div class="card-body">
+                <h5>Sushi Onion</h5>
+                <p class="card-text">Sushi mit Frühlingszwieblen, Thunfisch und Karotten gefüllt</p>
+            </div>
+            <button type="button" class="btn btn-dark">Warenkorb</button>
         </div>
-    </body>
+        <div class="card">
+            <img src="resources/img/salmon-nigir.jpg" class="card-img-top" alt="Link is broken">
+            <div class="card-body">
+                <h5>Lachs Nigiri</h5>
+                <p class="card-text">frischer Lachs auf Reis </p>
+            </div>
+            <button type="button" class="btn btn-dark">Warenkorb</button>
+        </div>
+        <div class="card">
+            <img src="resources/img/sushiplatte.jpg" class="card-img-top" alt="Link is broken">
+            <div class="card-body">
+                <h5>Sushi Platte</h5>
+                <p class="card-text">Sushi mit Frühlingszwieblen, Thunfisch und Karotten gefüllt</p>
+            </div>
+            <button type="button" class="btn btn-dark">Warenkorb</button>
+        </div>
+    </div>
+
+</body>
 
 
 
