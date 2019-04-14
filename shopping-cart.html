@@ -39,7 +39,7 @@
                         <img src="resources/img/salmon-nigir.jpg" width="100" height="100" alt="Bild nicht verfügbar">
                         <span class="product-title">Nigiri</span>
                     </div>
-                    <span class="cart-price cart-column" data-price="2.00">2.00€</span>
+                    <span class="cart-price cart-column" data-price="2.00">2.99€</span>
                     <div class="cart-quantity cart-column">
                         <input class="cart-quantity-input" type="number" value="1">
                         <button class="btn btn-primary" type="button"> Hinzufügen </button>
@@ -50,7 +50,7 @@
                         <img src="resources/img/sushiplatte.jpg" width="100" height="100" alt="Bild nicht verfügbar">
                         <span class="product-title">Sushi Platte</span>
                     </div>
-                    <span class="cart-price cart-column" data-price="15.00">15.00€</span>
+                    <span id="preis" class="cart-price cart-column" data-price="15.00">15.99€</span>
                     <div class="cart-quantity cart-column">
                         <input class="cart-quantity-input" type="number" value="1">
                         <button class="btn btn-primary" type="button"> Hinzufügen </button>
@@ -61,7 +61,7 @@
                         <img src="resources/img/sushi-onion.jpg" width="100" height="100" alt="Bild nicht verfügbar">
                         <span class="product-title">Thunfisch Sushi</span>
                     </div>
-                    <span class="cart-price cart-column" data-price="1.50">1.50€</span>
+                    <span class="cart-price cart-column" data-price="1.50">1.99€</span>
                     <div class="cart-quantity cart-column">
                         <input class="cart-quantity-input" type="number" value="1">
                         <button class="btn btn-primary" type="button"> Hinzufügen </button>
@@ -69,9 +69,6 @@
                 </div>
             </div>
 
-            <div class="cart-list">
-                
-            </div>
 
 
 
@@ -79,7 +76,7 @@
 
         <section id="customer-info">
             <h2>Kundeninformation</h2>
-            <form>
+            <form action="https://echo.fbi.h-da.de/" method="POST">
                 <div id="firstname" class="left-field">Vorname: <br>
                     <input type="text" class="form-control" name="firstname">
                 </div>
@@ -98,7 +95,17 @@
                 <div id="phone" class="one-field">Telefonnummer (zur Rückfrage): <br>
                     <input type="text" class="form-control" name="phone">
                 </div>
+                <div class="cart-list">
+                    <h2>Warenkorb</h2>
+                </div>
+                <div class="cart-total">
+                    <h4>Gesamtpreis:
+                        <span class="cart-total-price">0€</span>
+                        <input class="cart-total-price-input" type = "hidden" name = "total"/>
+                    </h4>
+                </div>
                 <button id="btn-pay" type="submit" class="btn btn-warning">Jetzt bestellen</button>
+                
             </form>
         </section>
 

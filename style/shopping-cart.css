@@ -108,8 +108,9 @@ li a:hover {
 }
 
 #btn-pay{
+    display: flex;
     float: right;
-    margin-top: 20px;
+    margin-top: 50px;
 }
 
 .cart-column {
@@ -155,3 +156,10 @@ li a:hover {
     margin-right:10px;
 }
 
+.cart-total{
+    display: flex;
+    margin-top:20px;
+    margin-left: 70%;
+    
+   
+}
