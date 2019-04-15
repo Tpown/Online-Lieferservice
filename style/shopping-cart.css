@@ -7,7 +7,7 @@ body {
     background-size: 100%;
     background-repeat: no-repeat;
 }
-
+/*
 .layer{
     background-color: rgba(8, 8, 8, 0.7);
     background-size: 100%;
@@ -18,7 +18,7 @@ body {
     right: 0;
     left: 0;
 }
-  
+  */
 li {
     float: left;
 }
@@ -76,19 +76,21 @@ li a:hover {
 }
 
 #order-overview{
-    background-color: rgba(235, 225, 225, 0.7);
+    background-color: rgba(0, 0, 0, 0.7);
     width: 50%;
     float: left;
     padding: 15px;
     border-radius: 20px;
+    color:white;
 }
 
 #customer-info{
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(0, 0, 0, 0.7);
     width: 50%;
     float: right;
     padding: 15px;
     border-radius: 20px;
+    color: white;
 }
 
 .left-field{
@@ -131,7 +133,7 @@ li a:hover {
 .cart-header {
     font-weight: bold;
     font-size: 1.25em;
-    color: #333;
+    color: white;
 }
 .cart-item {
     width: 45%;
@@ -140,7 +142,7 @@ li a:hover {
 .cart-price {
     width: 20%;
     font-size: 1.2em;
-    color: #333;
+    color: white;
 }
 
 .cart-quantity {

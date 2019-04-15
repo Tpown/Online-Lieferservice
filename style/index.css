@@ -68,21 +68,16 @@ li a:hover {
     border-width: 2px;
 }
 
-.card-img-top {
-    height: 180px;
-}
-
-.card-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-top: 10px;
-}
-
 .card{
     width: 280px;
-    height: 380px;
+    height: 270px;
     margin: 10px;
+    color: white;
+    background-color: rgba(76, 74, 74, 0.877)
+}
+
+.card-header{
+    background-color: black;
 }
 
 .price-text{

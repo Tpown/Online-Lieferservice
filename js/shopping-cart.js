@@ -5,7 +5,7 @@ if (document.readyState == 'loading') {
 }
 
 function ready() {
-    var addItemBtn = document.getElementsByClassName("btn btn-primary")
+    var addItemBtn = document.getElementsByClassName("btn btn-dark")
     for (var i = 0; i < addItemBtn.length; ++i) {
         var button = addItemBtn[i]
         button.addEventListener('click', addToCartClick)
