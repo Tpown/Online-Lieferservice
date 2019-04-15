@@ -69,11 +69,14 @@ li a:hover {
 }
 
 .card{
+    display: inline-flex;
     width: 280px;
     height: 270px;
     margin: 10px;
+    margin-left: 15px;
     color: white;
-    background-color: rgba(76, 74, 74, 0.877)
+    background-color: rgba(76, 74, 74, 0.877);
+    text-align: left;
 }
 
 .card-header{
@@ -100,4 +103,13 @@ li a:hover {
     /*background-color: rgba(8, 8, 8, 0.7); */
     margin:0px;
     max-width: 100%;
+}
+
+#overview{
+    display: inline-block;
+    width: 100%;
+    height: 100vh;
+    text-align: center;
+    
+
 }
