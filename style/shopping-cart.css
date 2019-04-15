@@ -80,6 +80,7 @@ li a:hover {
     width: 50%;
     float: left;
     padding: 15px;
+    border-radius: 20px;
 }
 
 #customer-info{
@@ -87,6 +88,7 @@ li a:hover {
     width: 50%;
     float: right;
     padding: 15px;
+    border-radius: 20px;
 }
 
 .left-field{
