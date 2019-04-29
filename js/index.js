@@ -45,10 +45,10 @@ function addToCartClick(event) {
     var price = product.getElementsByClassName('cart-price')[0].innerText
     var quantity = product.getElementsByClassName('cart-quantity-input')[0].value
     addItemToCart(title, price, quantity);
-
+/*
     console.log(price);
     console.log(title);
-    console.log(quantity);
+    console.log(quantity);*/
 
     updateCartTotal()
 
@@ -59,6 +59,7 @@ function addItemToCart(title, price, quantity) {
     cartrow.classList.add('cart-row')
     var cartList = document.getElementsByClassName('cart-list')[0]
     var cartItemNames = cartList.getElementsByClassName('product-title')
+    var $pID = title.substring(0,1)
 
     for(var i = 0; i < cartItemNames.length; ++i){
         if(cartItemNames[i].innerText == title){
@@ -70,9 +71,9 @@ function addItemToCart(title, price, quantity) {
     var cartRowContents = `<div class="cart-item cart-column">
     <span class="product-title">${title}</span>
 </div>
-<span class="cart-price cart-column" data-price="1.50">${price}</span>
+<span class="cart-price cart-column">${price}</span>
 <div class="cart-quantity cart-column">
-    <input class="cart-quantity-input" type="number" value=${quantity}>
+    <input class="cart-quantity-input" type="number" name="p${$pID}" value=${quantity}>
     <button class="btn btn-danger" type="button"> X </button>
 </div>`
     cartrow.innerHTML = cartRowContents

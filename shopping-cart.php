@@ -64,20 +64,19 @@ try {
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="style/shopping-cart.css">
+    <link rel="stylesheet" type="text/css" href="style/shopping-cart.css"> 
     <script src="./js/shopping-cart.js" async></script>
 </head>
 
 <body>
-    <div class="layer"></div>
-    <div class="top-navbar">
+    <nav class="top-navbar">
         <ul>
             <li> <a href="index.html">Über uns</a></li>
             <li> <a href="menu.html">Speisekarte</a></li>
             <li> <a href="order-status.html">Lieferstatus</a></li>
             <li> <a href="shopping-cart.html" class="active-menu"><i class="fas fa-shopping-cart"></i></a></li>
         </ul>
-    </div>
+    </nav>
     <div id="logo"> Sushi Lieferservice</div>
 
     <div id="container-overview">
@@ -140,6 +139,7 @@ HTML;
 </body>
 </html>
 HTML;
+
 
     $user_firstname = $_POST["firstname"];
     $user_lastname = $_POST["lastname"];
