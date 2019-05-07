@@ -5,10 +5,10 @@ for (var i = 0; i < accordions.length; ++i) {
        
         var content = this.nextElementSibling;
         console.log(content);
-        if (content.style.maxHeight) {
-            content.style.maxHeight = null;
+        if (content.style.height) {
+            content.style.height = null;
         } else {
-            content.style.maxHeight = content.scrollHeight + "px";
+            content.style.height = "100%";
         }
     });
 

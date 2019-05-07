@@ -1,7 +1,7 @@
 <?php
 require_once './Page.php';
 
-class PageTemplate extends Page
+class Orders extends Page
 {
 
     private $toDisplayAlert = false;
@@ -49,7 +49,7 @@ class PageTemplate extends Page
     protected function generateView()
     {
         $Products = $this->getViewData();
-        $this->generatePageHeader('Sushi-Lieferservice');
+        $this->generatePageHeader('Sushi - Warenkorb');
         echo <<<HTML
             <div id="logo"> Sushi Lieferservice</div>
         
@@ -97,22 +97,22 @@ HTML;
         echo <<<HTML
         <form action="shopping_cart.php" method="POST">
             <div id="firstname" class="left-field">Vorname: <br>
-                <input type="text" class="form-control" name="firstname" required>
+                <input type="text" class="form-control" name="firstname">
             </div>
             <div id="lastname" class="right-field">Nachname: <br>
-                <input type="text" class="form-control" name="lastname" required>
+                <input type="text" class="form-control" name="lastname">
             </div>
             <div id="address" class="one-field">Straße mit Hausnr.: <br>
-                <input type="text" class="form-control" name="address" required>
+                <input type="text" class="form-control" name="address">
             </div>
             <div id="zip" class="left-field">PLZ: <br>
-                <input type="text" class="form-control" name="zip" required>
+                <input type="text" class="form-control" name="zip">
             </div>
             <div id="city" class="right-field">Ort: <br>
-                <input type="text" class="form-control" name="city" required>
+                <input type="text" class="form-control" name="city">
             </div>
             <div id="phone" class="one-field">Telefonnummer (zur Rückfrage): <br>
-                <input type="text" class="form-control" name="phone" required>
+                <input type="text" class="form-control" name="phone">
             </div>
             <div class="cart-list">
                 <h2>Warenkorb</h2>
@@ -175,6 +175,11 @@ HTML;
                 $orderID = $this->_database->insert_id;
 
 
+                /*
+                $_SESSION["orderID"] = $orderID; 
+                echo $_SESSION["orderID"];
+*/
+
                 $Products = $this->getViewData();
                 $count = 1;
                 foreach ($Products as $product) {
@@ -190,16 +195,19 @@ HTML;
                 }
 
                 $this->toDisplaySuccess = true;
-                // }
+                //header('Location: http://127.0.0.1/Webseite/shopping_cart.php');
 
             }
         }
+        
     }
 
     public static function main()
     {
+        session_start();
         try {
-            $page = new PageTemplate();
+            $page = new Orders();
+           
             $page->processReceivedData();
             $page->generateView();
         } catch (Exception $e) {
@@ -209,4 +217,4 @@ HTML;
     }
 }
 
-PageTemplate::main();
+Orders::main();

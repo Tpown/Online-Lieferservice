@@ -83,14 +83,37 @@ abstract class Page
      *
      * @return none
      */
-    protected function generatePageHeader($headline = "Sushi Lieferservice")
+    protected function generatePageHeader($headline = "")
     {
         $headline = htmlspecialchars($headline);
         header("Content-type: text/html; charset=UTF-8");
+        $tmp1 = "";
+        $tmp2 = "";
+        $tmp3 = "";
+        $tmp4 = "";
+        $tmp5 = "";
 
+        switch($headline){
+            case ("Sushi - Übersicht"):
+            $tmp1 = "active-menu";
+            break;
+            case ("Sushi - Admin"):
+            $tmp2 = "active-menu";
+            $tmp5 = "admin";
+            break;
+            case ("Sushi - Lieferstatus"):
+            $tmp3 = "active-menu";
+            $tmp5 = "customer";
+            break;
+            case ("Sushi - Warenkorb"):
+            $tmp4 = "active-menu";
+            $tmp5 = "shopping-cart";
+            break;
+        };
+        
         echo <<<HTML
-       <!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="de">
     <head>
         <meta charset="UTF-8" />
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
@@ -98,19 +121,19 @@ abstract class Page
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="style/shopping-cart.css">
-        <script src="./js/index.js" async></script>
+        <link rel="stylesheet" type="text/css" href="style/$tmp5.css">
+        <script src="./js/$tmp5.js" async></script>
     </head>
 
     <body>
-        <div class="top-navbar">
+        <nav class="top-navbar">
             <ul>
-                <li> <a href="index.html" class="active-menu">Über uns</a></li>
-                <li> <a href="menu.html">Speisekarte</a></li>
-                <li> <a href="order-status.html">Lieferstatus</a></li>
-                <li> <a href="shopping_cart.php"><i class="fas fa-shopping-cart"></i></a></li>
+                <li> <a href="index.html" class="$tmp1">Übersicht</a></li>
+                <li> <a href="admin.php" class="$tmp2">Sushi-Meister</a></li>
+                <li> <a href="DeliveryStatus.php" class="$tmp3">Lieferstatus</a></li>
+                <li> <a href="shopping_cart.php" class="$tmp4"><i class="fas fa-shopping-cart"></i></a></li>
             </ul>
-        </div> 
+    </nav> 
 HTML;
     }
 
@@ -124,7 +147,7 @@ HTML;
         // to do: output common end of HTML code
         echo <<<HTML
         </body>
-        </html>
+</html>
 HTML;
     }
 

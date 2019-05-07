@@ -116,6 +116,7 @@ li a:hover {
 
 .cart-row {
     display: flex;
+    padding-left: 10px;  
 }
 
 .cart-header {
@@ -137,10 +138,6 @@ li a:hover {
     width: 35%;
 }
 
-.cart-row{
-    padding-left: 10px;    
-}
-
 .cart-quantity-input{
     width: 50px;
     text-align: center;
@@ -152,6 +149,8 @@ li a:hover {
     display: flex;
     margin-top:20px;
     margin-left: 70%;
-    
-   
+}
+
+.product-title{
+    margin-left: 10px;
 }
