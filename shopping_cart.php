@@ -175,10 +175,10 @@ HTML;
                 $orderID = $this->_database->insert_id;
 
 
-                /*
+                /**Setting SESSIONs */
                 $_SESSION["orderID"] = $orderID; 
                 echo $_SESSION["orderID"];
-*/
+
 
                 $Products = $this->getViewData();
                 $count = 1;
@@ -207,7 +207,6 @@ HTML;
         session_start();
         try {
             $page = new Orders();
-           
             $page->processReceivedData();
             $page->generateView();
         } catch (Exception $e) {

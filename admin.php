@@ -19,7 +19,50 @@ class Admin extends Page
 
     protected function getViewData()
     {
+        $sql = "SELECT b.ID, b.CustID, b.Time, o.quantity, o.fProductID, o.Status,p.title FROM Bestellung b
+                INNER JOIN ordered_products o ON (o.fOrderID = b.ID)
+                INNER JOIN product p ON (p.ID = o.fProductID)";
+
+        $Recordset = $this->_database->query($sql);
+        $Orders = array();
+
+        if ($Recordset) {
+            $Record = $Recordset->fetch_assoc();
+            while ($Record) {
+                $ID = htmlspecialchars($Record["ID"], ENT_QUOTES);
+                $CustID = htmlspecialchars($Record["CustID"], ENT_QUOTES);
+                $Time = htmlspecialchars($Record["Time"], ENT_QUOTES);
+                $quantity = htmlspecialchars($Record["quantity"], ENT_QUOTES);
+                $fProductID = htmlspecialchars($Record["fProductID"], ENT_QUOTES);
+                $status = htmlspecialchars($Record["Status"],  ENT_QUOTES);
+                $title = htmlspecialchars($Record["title"],  ENT_QUOTES);
+                $Orders[] = [
+                    "ID" => $ID,
+                    "CustID" => $CustID,
+                    "Time" => $Time,
+                    "ProductID" => $fProductID,
+                    "Quantity" => $quantity,
+                    "Status" => $status,
+                    "Title" => $title
+                ];
+                $Record = $Recordset->fetch_assoc();
+            }
+            $Recordset->free();
+        }
+
+        array_multisort(array_column($Orders, 'ID'), SORT_ASC, $Orders);
+
+        /*   foreach ($Orders as $orders) {
+            echo  "ID " . $orders["ID"] . " CustID: " .  $orders["CustID"] . " Time: " . $orders["Time"] . " Anzahl: " . $orders["Quantity"] . " ProductID: " . $orders["ProductID"] . " Titel: " . $orders["Title"];
+            echo "<br>";
+        }*/
+
+        return $Orders;
+    }
+    protected function getViewData_orders()
+    {
         $sql = "SELECT ID, CustID, Time FROM Bestellung";
+
         $Recordset = $this->_database->query($sql);
         $Orders = array();
 
@@ -32,19 +75,24 @@ class Admin extends Page
                 $Orders[] = [
                     "ID" => $ID,
                     "CustID" => $CustID,
-                    "Time" => $Time
+                    "Time" => $Time,
                 ];
                 $Record = $Recordset->fetch_assoc();
             }
             $Recordset->free();
         }
+        array_multisort(array_column($Orders, 'ID'), SORT_DESC, $Orders);
         return $Orders;
     }
 
     protected function generateView()
     {
-        $Orders = $this->getViewData();
+        $Orders = $this->getViewData_orders();
+        $ordered_products = $this->getViewData();
         $this->generatePageHeader("Sushi - Admin");
+
+        //  echo $_SESSION["orderID"];
+
         echo <<<HTML
     <div id="logo"> Sushi Lieferservice</div>
     <section class="container">
@@ -57,77 +105,210 @@ class Admin extends Page
 HTML;
 
         /*------------------------------INSERT Orders--------------------------------------------------------*/
-        function insert_tablerow($entry = "")
-        {
-            echo <<<HTML
-                <li class="items"> #$entry Bestellung </li>    
-HTML;
-        };
 
-        $key = array();
+
+        $x = 1;
+        $ck = "checked";
         foreach ($Orders as $order) {
-            insert_tablerow($order["ID"]);
-            $key["ID"] = $order["ID"];
+            if (isset($_SESSION["orderID"]) ||isset($_SESSION["selectID"])) {
+                if ($order["ID"] == $_SESSION["selectID"]) {
+                    $this->insert_order_ckd($order["ID"], $x, $ck);
+                } else if ($order["ID"] == $_SESSION["orderID"]) {
+                    $this->insert_order_ckd($order["ID"], $x, $ck);
+                } else {
+                    $this->insert_tablerow($order["ID"], $x);
+                }
+            } else {
+                $this->insert_tablerow($order["ID"], $x);
+            }
+            ++$x;
         };
-       
+        /*--------------------------------------------------------------------------------------------------*/
+        
+        if (isset($_SESSION["selectID"])){
+            echo <<<HTML
+            </ul>
+</section> 
+        <section class="right-area"> 
+        <h4 id="status-title">Status: #{$_SESSION["selectID"]} Bestellung</h4>
+        <section id ="order-item-status">
+        <form action="admin.php" id="formid" method="POST">
+            <input   name = "Bestellung"  type = "hidden"  value= '{$_SESSION["selectID"]}'/>
+HTML;
+        }else if (isset($_SESSION["orderID"])) {
+            echo <<<HTML
+            </ul>
+</section> 
+        <section class="right-area"> 
+        <h4 id="status-title">Status: #{$_SESSION["orderID"]} Bestellung</h4>
+        <section id ="order-item-status">
+        <form action="admin.php" id="formid" method="POST">
+            <input   name = "Bestellung"  type = "hidden"  value= '{$_SESSION["orderID"]}'/>
+HTML;
+        } else {
+            echo <<<HTML
+            </ul>
+</section> 
+        <section class="right-area"> 
+        <h4 id="status-title"></h4>
+        <section id ="order-item-status">
+        <form action="admin.php" id="formid" method="POST">
+            <input   name = "Bestellung" type = "hidden"  value= '{$_SESSION["orderID"]}'/>
+HTML;
+        }
+
+        /*---------------------------------INSERT ITEMS FOR ORDER-----------------------------------------------------------------*/
+        /*   
+        $csk = 0;
+        for($i = 0; $i < 4 ; ++$i){
+        $this->insert_order_items($csk);
+        $csk += 4;
+    };*/
+
+
+        $count = 0;
+        foreach ($ordered_products as $products) {
+            if(isset($_SESSION["selectID"])){
+                if ($products["ID"] == $_SESSION["selectID"]) {
+                    $this->insert_tablerow_items($products["Title"], $count, $products["Quantity"], $products["ProductID"], $products["Status"]);
+                    $count += 4;
+                    ++$x;
+                }
+            }else if (isset($_SESSION["orderID"]))
+                if ($products["ID"] == $_SESSION["orderID"]) {
+                    $this->insert_tablerow_items($products["Title"], $count, $products["Quantity"], $products["ProductID"], $products["Status"]);
+                    $count += 4;
+                    ++$x;
+                }
+        }
         /*--------------------------------------------------------------------------------------------------*/
         echo <<<HTML
-                </ul>
-    </section> 
-            <section class="right-area"> 
-            <h4>Status: </h4>
-            <ul class="checkbox-items"> 
-                <li>2x Nigiri</li>
-                <li>
-                <input type="checkbox" id="checkbox1">
-                    <label class="status" for="checkbox1">
-                       Bestellt
-                    </label>
-                </li>
-                <li>
-                <input type="checkbox" id="checkbox2">
-                    <label class="status" for="checkbox2">Wird zubereitet</label>
-                </li>
-                <li>
-                <input type="checkbox" id="checkbox3">
-                    <label class="status" for="checkbox3">
-                       Verpackt
-                    </label>
-                </li>
-                <li>
-                <input type="checkbox" id="checkbox4">
-                    <label class="status" for="checkbox4">
-                       Bereit zur Lieferung
-                    </label>
-                </li>
-            </ul>
+        </form>
+            </section>
     </section>           
         </div>
-        <button class="accordion">Lieferant</button>
-        <div class="accordion-content">
-            <p>Test Test</p>
-        </div>
+
     </section>
     </div>
 HTML;
 
-foreach($key as $id){
-    echo $id
-    ;
-};
-
-
         $this->generatePageFooter();
     }
+
+    /**--------------------------------------------------------------------------------------------------**
+     **                   Hilfsfunktionen                                                                **
+     **--------------------------------------------------------------------------------------------------**/
+    protected function insert_tablerow_items($entry1, $ck, $entry3, $nr, $status)
+    {
+
+        $ck1 = $ck + 1;
+        $ck2 = $ck + 2;
+        $ck3 = $ck + 3;
+        $ck4 = $ck + 4;
+
+        $curr0 = "";
+        $curr1 = "";
+        $curr2 = "";
+        $curr3 = "";
+
+
+        switch ($status) {
+            case 0:
+                $curr0 = "checked";
+                break;
+            case 1:
+                $curr1 = "checked";
+                break;
+            case 2:
+                $curr2 = "checked";
+                break;
+            case 3:
+                $curr3 = "checked";
+                break;
+        }
+
+
+        /** Status switch case code TBD */
+        echo <<<HTML
+        <h6  id="product"> Anzahl: $entry3    |    Produkt: $entry1 </h6>
+        <ul class="checkbox-items"> 
+            <li>
+            <input type="radio" id="checkbox$ck1" name="item$nr" value="0" onclick="document.forms['formid'].submit()" $curr0>
+                <label class="status" for="checkbox$ck1">
+                   Bestellt
+                </label>
+            </li>
+            <li>
+            <input type="radio" id="checkbox$ck2" name="item$nr" value="1" onclick="document.forms['formid'].submit()" $curr1>
+                <label class="status" for="checkbox$ck2">
+                    Wird zubereitet
+                </label>
+            </li>
+            <li>
+            <input type="radio" id="checkbox$ck3" name="item$nr" value="2" onclick="document.forms['formid'].submit()" $curr2>
+                <label class="status" for="checkbox$ck3">
+                   Verpackt
+                </label>
+            </li>
+            <li>
+            <input type="radio" id="checkbox$ck4" name="item$nr" value="3" onclick="document.forms['formid'].submit()" $curr3>
+                <label class="status" for="checkbox$ck4">
+                   Bereit zur Lieferung
+                </label>
+            </li>
+        </ul>
+HTML;
+    }
+
+    protected function insert_tablerow($entry, $x)
+    {
+        echo <<<HTML
+            <li>   
+            <input type="radio" name="order" id="item$x" onclick="getOrder($entry)">
+                <label  class="items" for="item$x">
+                #$entry Bestellung
+                </label> 
+                </li>  
+HTML;
+    }
+
+    protected function insert_order_ckd($entry, $x, $ck)
+    {
+        echo <<<HTML
+            <li>   
+            <input type="radio" name="order" id="item$x" onclick="getOrder($entry)" checked="$ck">
+                <label  class="items" for="item$x">
+                #$entry Bestellung
+                </label> 
+                </li>  
+HTML;
+    }
+
 
     protected function processReceivedData()
     {
         parent::processReceivedData();
-        // to do: call processReceivedData() for all members
+    
+        if (isset($_POST["Bestellung"])) {
+            $_SESSION["selectID"] = $_POST["Bestellung"];
+            $OrderID = $this->_database->real_escape_string($_POST["Bestellung"]);
+            //echo "BestellID: " . $OrderID . "<br>";
+            for($i = 1; $i <= 4 ; ++$i)
+            if (isset($_POST["item$i"])) {
+                $item = $_POST["item$i"]; 
+                $sql_item = $this->_database->real_escape_string($item);
+               /* echo "Status: " . $sql_item . "<br>";
+                echo "fProductID: " . $i . "<br>";*/
+                $sql = "UPDATE ordered_products SET Status=\"$sql_item\" WHERE fOrderID = \"$OrderID\" AND fProductID = \"$i\"";
+                $this->_database->query($sql);
+                header('Location: http://127.0.0.1/Webseite/admin.php');
+            }
+        }
+        
     }
     public static function main()
     {
-
+        session_start();
         try {
             $page = new Admin();
             $page->processReceivedData();

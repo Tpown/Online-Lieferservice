@@ -13,9 +13,10 @@ body {
     background-repeat: no-repeat;
     max-width: 100%;
     min-height: 100%;
+    height: 100%;
 }
 li {
-    float: left;
+    display: contents;
     list-style: none;
 }
 
@@ -46,6 +47,8 @@ li a:hover {
 }
 
 .top-navbar ul  {
+    flex-direction: row;
+    display: flex;
     list-style-type: none;
 }
 
@@ -81,12 +84,14 @@ button.accordion{
     border-left: 1px solid whitesmoke;
     border-right: 1px solid whitesmoke;
     background: rgba(0, 0, 0, 0.592);
-    height: 0px;
+
     overflow: hidden;
 }
 
 #Meister{
-    height: 350px;
+    height: 450px;
+
+
 }
 
 .container{
@@ -104,7 +109,7 @@ button.accordion{
     background-color: rgba(0, 0, 0, 0.83);
     overflow-y: auto;
     overflow-x: hidden;
-    height: 350px;
+    height: 100%;
 }
 
 .itemlist{
@@ -122,7 +127,7 @@ button.accordion{
     align-items: flex-start;
     padding: 10px;
     background: grey;
-    margin-top: 5px
+    margin-top: -5px
 }
 
 .items:hover{
@@ -133,7 +138,8 @@ button.accordion{
     float: right;
     width: 75%;
     background-color: rgba(0, 0, 0, 0.83);
-    height: 350px;
+    height: 100%;
+    overflow: auto;
 }
 
 .status{
@@ -152,15 +158,16 @@ button.accordion{
     border-bottom: none;
 }
 
-input[type="checkbox"]:checked + .status{
+
+input[type="radio"]:checked + label {
+    background: rgb(118, 9, 9);
+  }
+
+
+
+input[type="radio"]:checked + .status{
     background: rgb(60, 255, 76);
-   
 }
-
-input[type=checkbox]{
-    display:none;
-}
-
 .status:hover{
     background: rgb(42, 184, 54)
 }
@@ -168,4 +175,12 @@ input[type=checkbox]{
 .checkbox-items{
     display: flex;
     justify-content: flex-start;
+}
+
+input[type=radio]{
+    display: none;
+}
+
+#product{
+    margin-left: 10px;
 }
