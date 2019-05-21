@@ -1,3 +1,13 @@
+function myFunction() {
+    "use strict";
+    var x = document.getElementById("myTopnav");
+    if (x.className === "top-navbar") {
+      x.className += " responsive";
+    } else {
+      x.className = "top-navbar";
+    }
+  }
+  
 if (document.readyState == 'loading') {
     document.addEventListener('DOMContentLoaded', ready)
 } else {
@@ -5,14 +15,13 @@ if (document.readyState == 'loading') {
 }
 
 function ready() {
+    "use strict";
     var addItemBtn = document.getElementsByClassName("btn btn-dark")
     for (var i = 0; i < addItemBtn.length; ++i) {
         var button = addItemBtn[i]
         button.addEventListener('click', addToCartClick)
     }
     //console.log(addItemBtn)
-
-
 
     var quantityInputs = document.getElementsByClassName('cart-quantity-input')
     for (var i = 0; i < quantityInputs.length; ++i) {
@@ -22,12 +31,25 @@ function ready() {
 }
 
 function removeItem(event){
+    "use strict";
     var button = event.target
     button.parentElement.parentElement.remove()
     updateCartTotal()
 }
 
+function removeAll(){
+    "use strict";
+    var sc_items = document.getElementById("shoppingcart-items");
+
+    while (sc_items.hasChildNodes()) {
+        sc_items.removeChild(sc_items.firstChild);
+    }
+    updateCartTotal();
+}
+
+
 function quantityChanged(event) {
+    "use strict";
     var input = event.target
     if (isNaN(input.value) || input.value <= 0) {
         input.value = 1
@@ -36,6 +58,7 @@ function quantityChanged(event) {
 }
 
 function addToCartClick(event) {
+    "use strict";
     var button = event.target
     var product = button.parentElement.parentElement
     var title = product.getElementsByClassName('product-title')[0].innerText
@@ -55,6 +78,7 @@ function addToCartClick(event) {
 }
 
 function addItemToCart(title, price, quantity) {
+    "use strict";
     var cartrow = document.createElement('div')
     cartrow.classList.add('cart-row')
     var cartList = document.getElementsByClassName('cart-list')[0]
@@ -89,6 +113,7 @@ function addItemToCart(title, price, quantity) {
 }
 
 function updateCartTotal() {
+    "use strict";
     var cartItemContainer = document.getElementsByClassName('cart-list')[0]
     var cartRows = cartItemContainer.getElementsByClassName('cart-row')
     var total = 0

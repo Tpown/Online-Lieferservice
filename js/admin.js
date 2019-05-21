@@ -1,10 +1,14 @@
-/**
- * AJAX Request 
- * 
- */
+function myFunction() {
+    var x = document.getElementById("myTopnav");
+    if (x.className === "top-navbar") {
+      x.className += " responsive";
+    } else {
+      x.className = "top-navbar";
+    }
+  }
+  
 function getOrder(orderID) {
     "use strict";
-    console.log("Hello Cheese");
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://127.0.0.1/Webseite/CustomerStatus.php');
 
@@ -17,8 +21,21 @@ function getOrder(orderID) {
                 return id.ID == orderID;
             })
             console.log(filtered_response);
+            
+         /*   var isTrue = false;
+            for(var i = 0; i < filtered_response.length; ++i){
+                if(filtered_response[i].Status == 3){
+                    isTrue = true;
+                }else{
+                    break;
+                }
+            }
 
-            remove_allChilds();
+            if(isTrue){
+
+            }*/
+
+            remove_allChilds(); 
             status_title(orderID);
 
             for (var index = 0; index < filtered_response.length; ++index) {

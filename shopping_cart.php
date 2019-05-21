@@ -51,8 +51,6 @@ class Orders extends Page
         $Products = $this->getViewData();
         $this->generatePageHeader('Sushi - Warenkorb');
         echo <<<HTML
-            <div id="logo"> Sushi Lieferservice</div>
-        
             <div id="container-overview">
                 <section id="order-overview">
                     <h2>Bestellübersicht</h2>
@@ -97,32 +95,32 @@ HTML;
         echo <<<HTML
         <form action="shopping_cart.php" method="POST">
             <div id="firstname" class="left-field">Vorname: <br>
-                <input type="text" class="form-control" name="firstname">
+                <input type="text" class="form-control" name="firstname" required>
             </div>
             <div id="lastname" class="right-field">Nachname: <br>
-                <input type="text" class="form-control" name="lastname">
+                <input type="text" class="form-control" name="lastname" required>
             </div>
             <div id="address" class="one-field">Straße mit Hausnr.: <br>
-                <input type="text" class="form-control" name="address">
+                <input type="text" class="form-control" name="address" required>
             </div>
             <div id="zip" class="left-field">PLZ: <br>
-                <input type="text" class="form-control" name="zip">
+                <input type="text" class="form-control" name="zip" required>
             </div>
             <div id="city" class="right-field">Ort: <br>
-                <input type="text" class="form-control" name="city">
+                <input type="text" class="form-control" name="city" required>
             </div>
             <div id="phone" class="one-field">Telefonnummer (zur Rückfrage): <br>
-                <input type="text" class="form-control" name="phone">
+                <input type="text" class="form-control" name="phone" required>
             </div>
-            <div class="cart-list">
-                <h2>Warenkorb</h2>
-            </div>
+            <h2>Warenkorb</h2>
+            <div class="cart-list" id="shoppingcart-items"></div>
             <div class="cart-total">
                 <h4>Gesamtpreis:
                     <span class="cart-total-price">0€</span>
                     <input class="cart-total-price-input" type = "hidden" name = "total" required/>
                 </h4>
             </div>
+            <button id="btn-delete-all" type="button" class="btn btn-danger" onclick = "removeAll()">Warenkorb leeren</button> 
             <button id="btn-pay" type="submit" class="btn btn-warning">Jetzt bestellen</button>     
         </form>
     </section>
@@ -177,7 +175,7 @@ HTML;
 
                 /**Setting SESSIONs */
                 $_SESSION["orderID"] = $orderID; 
-                echo $_SESSION["orderID"];
+               // echo $_SESSION["orderID"];
 
 
                 $Products = $this->getViewData();

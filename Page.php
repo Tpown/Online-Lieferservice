@@ -91,23 +91,34 @@ abstract class Page
         $tmp2 = "";
         $tmp3 = "";
         $tmp4 = "";
+        $css = "";
         $tmp5 = "";
+        $js = "";
 
         switch($headline){
             case ("Sushi - Übersicht"):
             $tmp1 = "active-menu";
+            $css = "index";
             break;
             case ("Sushi - Admin"):
             $tmp2 = "active-menu";
-            $tmp5 = "admin";
+            $css = "admin";
+            $js = "<script src=\"./js/admin.js\" async></script>";
+            break;
+            case ("Sushi - Lieferant"):
+            $tmp5 = "active-menu";
+            $css = "delivery";
+            $js = "<script src=\"./js/delivery.js\" async></script>";
             break;
             case ("Sushi - Lieferstatus"):
             $tmp3 = "active-menu";
-            $tmp5 = "customer";
+            $css = "admin";
+            $js = "<script src=\"./js/admin.js\" async></script>";
             break;
             case ("Sushi - Warenkorb"):
             $tmp4 = "active-menu";
-            $tmp5 = "shopping-cart";
+            $css = "shopping-cart";
+            $js = "<script src=\"./js/shopping-cart.js\" async></script>";
             break;
         };
         
@@ -121,19 +132,24 @@ abstract class Page
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="style/$tmp5.css">
-        <script src="./js/$tmp5.js" async></script>
+        <link rel="stylesheet" type="text/css" href="style/$css.css">
+        $js
     </head>
 
     <body>
-        <nav class="top-navbar">
-            <ul>
-                <li> <a href="index.html" class="$tmp1">Übersicht</a></li>
-                <li> <a href="admin.php" class="$tmp2">Sushi-Meister</a></li>
-                <li> <a href="DeliveryStatus.php" class="$tmp3">Lieferstatus</a></li>
-                <li> <a href="shopping_cart.php" class="$tmp4"><i class="fas fa-shopping-cart"></i></a></li>
-            </ul>
+    <div class="header">
+    <img id="logo" src="./resources/img/logo2.jpg" alt="some text" width=60 height=40>
+        <nav class="top-navbar"  id="myTopnav">
+                <a href="index.php" class="$tmp1">Übersicht</a>
+                <a href="admin.php" class="$tmp2">Sushi-Meister</a>
+                <a href="Delivery.php" class="$tmp5">Lieferant</a>
+                <a href="DeliveryStatus.php" class="$tmp3">Lieferstatus</a>
+                <a href="shopping_cart.php" class="$tmp4"><i class="fas fa-shopping-cart"></i></a>
+                <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a> 
     </nav> 
+    </div>
 HTML;
     }
 

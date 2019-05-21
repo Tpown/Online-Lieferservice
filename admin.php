@@ -91,10 +91,14 @@ class Admin extends Page
         $ordered_products = $this->getViewData();
         $this->generatePageHeader("Sushi - Admin");
 
-        //  echo $_SESSION["orderID"];
+        //echo $_SESSION["orderID"];
 
         echo <<<HTML
-    <div id="logo"> Sushi Lieferservice</div>
+        <!-- <script type="text/javascript">
+            setTimeout(function(){
+                 window.location.reload(1);
+            }, 5000);
+        </script> -->
     <section class="container">
         <h2 id="header">privater Bereich</h2>
         <button class="accordion">Sushi-Meister</button>
@@ -110,10 +114,14 @@ HTML;
         $x = 1;
         $ck = "checked";
         foreach ($Orders as $order) {
-            if (isset($_SESSION["orderID"]) ||isset($_SESSION["selectID"])) {
+            if (isset($_SESSION["selectID"])) {
                 if ($order["ID"] == $_SESSION["selectID"]) {
                     $this->insert_order_ckd($order["ID"], $x, $ck);
-                } else if ($order["ID"] == $_SESSION["orderID"]) {
+                } else {
+                    $this->insert_tablerow($order["ID"], $x);
+                }
+            } else if (isset($_SESSION["orderID"])) {
+                if ($order["ID"] == $_SESSION["orderID"]) {
                     $this->insert_order_ckd($order["ID"], $x, $ck);
                 } else {
                     $this->insert_tablerow($order["ID"], $x);
@@ -124,8 +132,8 @@ HTML;
             ++$x;
         };
         /*--------------------------------------------------------------------------------------------------*/
-        
-        if (isset($_SESSION["selectID"])){
+
+        if (isset($_SESSION["selectID"])) {
             echo <<<HTML
             </ul>
 </section> 
@@ -135,7 +143,7 @@ HTML;
         <form action="admin.php" id="formid" method="POST">
             <input   name = "Bestellung"  type = "hidden"  value= '{$_SESSION["selectID"]}'/>
 HTML;
-        }else if (isset($_SESSION["orderID"])) {
+        } else if (isset($_SESSION["orderID"])) {
             echo <<<HTML
             </ul>
 </section> 
@@ -152,8 +160,8 @@ HTML;
         <section class="right-area"> 
         <h4 id="status-title"></h4>
         <section id ="order-item-status">
-        <form action="admin.php" id="formid" method="POST">
-            <input   name = "Bestellung" type = "hidden"  value= '{$_SESSION["orderID"]}'/>
+        <form action="Delivery.php" id="formid" method="POST">
+            <input   name = "Bestellung"  type = "hidden"/>
 HTML;
         }
 
@@ -165,8 +173,28 @@ HTML;
         $csk += 4;
     };*/
 
+    $selectId = $_SESSION["selectID"];
+    echo <<<HTML
+    <script>
+    getOrder($selectId);
+    </script>
+HTML;
 
-        $count = 0;
+        /*if (isset($_SESSION["selectID"])) {
+            echo <<<HTML
+        <script type="text/javascript">
+          getOrder({$_SESSION["selectID"]});
+        </script>
+HTML;
+        } else if (isset($_SESSION["orderID"])) {
+            echo <<<HTML
+        <script type="text/javascript">
+          getOrder({$_SESSION["orderID"]});
+        </script>
+HTML;
+        };
+*/
+        /*  $count = 0;
         foreach ($ordered_products as $products) {
             if(isset($_SESSION["selectID"])){
                 if ($products["ID"] == $_SESSION["selectID"]) {
@@ -180,7 +208,7 @@ HTML;
                     $count += 4;
                     ++$x;
                 }
-        }
+        }*
         /*--------------------------------------------------------------------------------------------------*/
         echo <<<HTML
         </form>
@@ -288,23 +316,22 @@ HTML;
     protected function processReceivedData()
     {
         parent::processReceivedData();
-    
+
         if (isset($_POST["Bestellung"])) {
             $_SESSION["selectID"] = $_POST["Bestellung"];
             $OrderID = $this->_database->real_escape_string($_POST["Bestellung"]);
             //echo "BestellID: " . $OrderID . "<br>";
-            for($i = 1; $i <= 4 ; ++$i)
-            if (isset($_POST["item$i"])) {
-                $item = $_POST["item$i"]; 
-                $sql_item = $this->_database->real_escape_string($item);
-               /* echo "Status: " . $sql_item . "<br>";
+            for ($i = 1; $i <= 4; ++$i)
+                if (isset($_POST["item$i"])) {
+                    $item = $_POST["item$i"];
+                    $sql_item = $this->_database->real_escape_string($item);
+                    /* echo "Status: " . $sql_item . "<br>";
                 echo "fProductID: " . $i . "<br>";*/
-                $sql = "UPDATE ordered_products SET Status=\"$sql_item\" WHERE fOrderID = \"$OrderID\" AND fProductID = \"$i\"";
-                $this->_database->query($sql);
-                header('Location: http://127.0.0.1/Webseite/admin.php');
-            }
+                    $sql = "UPDATE ordered_products SET Status=\"$sql_item\" WHERE fOrderID = \"$OrderID\" AND fProductID = \"$i\"";
+                    $this->_database->query($sql);
+                    header('Location: http://127.0.0.1/Webseite/admin.php');
+                }
         }
-        
     }
     public static function main()
     {
