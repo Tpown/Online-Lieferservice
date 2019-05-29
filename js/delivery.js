@@ -7,10 +7,11 @@ function myFunction() {
     }
   }
   
-  
+  var intervalID;
   function getOrder(orderID) {
     "use strict";
     console.log("Hello Cheese");
+    clearInterval(intervalID)
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://127.0.0.1/Webseite/CustomerStatus.php');
 
@@ -34,6 +35,12 @@ function myFunction() {
         }
 
     }
+    
+    intervalID = setInterval(function(){
+        xhr.open('GET', 'http://127.0.0.1/Webseite/CustomerStatus.php');
+        xhr.send();
+   }, 10000);
+   
     xhr.send();
 }
 

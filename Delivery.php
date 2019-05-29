@@ -3,66 +3,23 @@ require_once './Page.php';
 
 class Admin extends Page
 {
-
     protected function __construct()
     {
         parent::__construct();
         // to do: instantiate members representing substructures/blocks
     }
 
-
     protected function __destruct()
     {
         parent::__destruct();
     }
 
-
-    protected function getViewData()
-    {
-        $sql = "SELECT b.ID, b.CustID, b.Time, o.quantity, o.fProductID, o.Status,p.title FROM Bestellung b
-                INNER JOIN ordered_products o ON (o.fOrderID = b.ID)
-                INNER JOIN product p ON (p.ID = o.fProductID)";
-
-        $Recordset = $this->_database->query($sql);
-        $Orders = array();
-
-        if ($Recordset) {
-            $Record = $Recordset->fetch_assoc();
-            while ($Record) {
-                $ID = htmlspecialchars($Record["ID"], ENT_QUOTES);
-                $CustID = htmlspecialchars($Record["CustID"], ENT_QUOTES);
-                $Time = htmlspecialchars($Record["Time"], ENT_QUOTES);
-                $quantity = htmlspecialchars($Record["quantity"], ENT_QUOTES);
-                $fProductID = htmlspecialchars($Record["fProductID"], ENT_QUOTES);
-                $status = htmlspecialchars($Record["Status"],  ENT_QUOTES);
-                $title = htmlspecialchars($Record["title"],  ENT_QUOTES);
-                $Orders[] = [
-                    "ID" => $ID,
-                    "CustID" => $CustID,
-                    "Time" => $Time,
-                    "ProductID" => $fProductID,
-                    "Quantity" => $quantity,
-                    "Status" => $status,
-                    "Title" => $title
-                ];
-                $Record = $Recordset->fetch_assoc();
-            }
-            $Recordset->free();
-        }
-
-        array_multisort(array_column($Orders, 'ID'), SORT_ASC, $Orders);
-
-        /*   foreach ($Orders as $orders) {
-            echo  "ID " . $orders["ID"] . " CustID: " .  $orders["CustID"] . " Time: " . $orders["Time"] . " Anzahl: " . $orders["Quantity"] . " ProductID: " . $orders["ProductID"] . " Titel: " . $orders["Title"];
-            echo "<br>";
-        }*/
-
-        return $Orders;
-    }
     protected function getViewData_orders()
     {
-        $sql = "SELECT b.ID, b.CustID, b.Time, c.surname, c.lastname, c.address, c.zip, c.city, c.phone FROM Bestellung b
-        INNER JOIN customer c ON (c.ID = b.CustID)";
+        $sql = "SELECT DISTINCT b.ID, b.CustID, b.Time, c.surname, c.lastname, c.address, c.zip, c.city, c.phone FROM Bestellung b
+        INNER JOIN customer c ON (c.ID = b.CustID)
+        INNER JOIN ordered_products o ON o.fOrderID = b.ID
+        WHERE o.Status < 5";
 
         $Recordset = $this->_database->query($sql);
         $Orders = array();
@@ -106,11 +63,6 @@ class Admin extends Page
 
         echo <<<HTML
         
-             <script type="text/javascript">
-            setTimeout(function(){
-                 window.location.reload(1);
-            }, 10000);
-        </script> 
     <section class="container">
         <h2 id="header">privater Bereich</h2>
         <button class="accordion">Sushi-Lieferant</button>
@@ -122,6 +74,9 @@ HTML;
 
         /*------------------------------INSERT Orders--------------------------------------------------------*/
 
+       /* echo $_SESSION["orderID"];
+        echo $_SESSION["Delivery_orderID"];
+        echo $_SESSION["selectID"];*/
 
         $x = 1;
         $ck = "checked";
@@ -132,8 +87,8 @@ HTML;
                 } else {
                     $this->insert_tablerow($order["ID"], $x);
                 }
-            } else if (isset($_SESSION["orderID"])) {
-                if ($order["ID"] == $_SESSION["orderID"]) {
+            } else if (isset($_SESSION["Delivery_orderID"])) {
+                if ($order["ID"] == $_SESSION["Delivery_orderID"]) {
                     $this->insert_order_ckd($order["ID"], $x, $ck);
                 } else {
                     $this->insert_tablerow($order["ID"], $x);
@@ -154,20 +109,25 @@ HTML;
             <input   name = "Bestellung"  type = "hidden"/>
 HTML;
 
-        if(isset($_SESSION["selectID"])){
+        if (isset($_SESSION["selectID"])) {
+            $selectId = $_SESSION["selectID"];
             echo <<<HTML
             <script type="text/javascript">
-              window.onload = getOrder({$_SESSION["selectID"]});
+              getOrder($selectId);
             </script>
 HTML;
-        }else if(isset($_SESSION["orderID"])){
+        } else if (isset($_SESSION["Delivery_orderID"])) {
+            $deliveryOrderID = $_SESSION["Delivery_orderID"];
             echo <<<HTML
             <script type="text/javascript">
-              window.onload = getOrder({$_SESSION["orderID"]});
+             getOrder($deliveryOrderID);
             </script>
 HTML;
+        }else{
+            foreach($Orders as $order) {
+                echo $order['ID'], '<br>';
+            }
         };
-
 
         echo <<<HTML
         </form>
@@ -262,19 +222,34 @@ HTML;
     protected function processReceivedData()
     {
         parent::processReceivedData();
+        $Orders = $this->getViewData_orders();
+        echo $_SESSION["selectID"];
+        if(in_array($_SESSION["selectID"], $Orders, true)){
+            echo "test";
+        }
+        echo $_SESSION["selectID"];
+
 
         if (isset($_POST["Bestellung"])) {
+
             $_SESSION["selectID"] = $_POST["Bestellung"];
             $OrderID = $this->_database->real_escape_string($_POST["Bestellung"]);
+          
             //echo "BestellID: " . $OrderID . "<br>";
             for ($i = 1; $i <= 4; ++$i)
                 if (isset($_POST["item$i"])) {
                     $item = $_POST["item$i"];
                     $sql_item = $this->_database->real_escape_string($item);
-                    /* echo "Status: " . $sql_item . "<br>";
-                echo "fProductID: " . $i . "<br>";*/
                     $sql = "UPDATE ordered_products SET Status=\"$sql_item\" WHERE fOrderID = \"$OrderID\" AND fProductID = \"$i\"";
                     $this->_database->query($sql);
+
+                   /* if (empty($Orders)) {
+                        unset($_SESSION["selectID"]);
+                        unset($_SESSION["Delivery_orderID"]);
+                    }else if(!in_array($_SESSION["selectID"], $Orders["ID"]) || !in_array($_SESSION["Delivery_orderID"], $Orders["ID"])){
+                        unset($_SESSION["selectID"]);
+                        unset($_SESSION["Delivery_orderID"]);
+                    }*/
                     header('Location: http://127.0.0.1/Webseite/Delivery.php');
                 }
         }

@@ -21,7 +21,8 @@ class Admin extends Page
     {
         $sql = "SELECT b.ID, b.CustID, b.Time, o.quantity, o.fProductID, o.Status,p.title FROM Bestellung b
                 INNER JOIN ordered_products o ON (o.fOrderID = b.ID)
-                INNER JOIN product p ON (p.ID = o.fProductID)";
+                INNER JOIN product p ON (p.ID = o.fProductID)
+                WHERE o.Status < 3";
 
         $Recordset = $this->_database->query($sql);
         $Orders = array();
@@ -52,8 +53,8 @@ class Admin extends Page
 
         array_multisort(array_column($Orders, 'ID'), SORT_ASC, $Orders);
 
-        /*   foreach ($Orders as $orders) {
-            echo  "ID " . $orders["ID"] . " CustID: " .  $orders["CustID"] . " Time: " . $orders["Time"] . " Anzahl: " . $orders["Quantity"] . " ProductID: " . $orders["ProductID"] . " Titel: " . $orders["Title"];
+      /*   foreach ($Orders as $orders) {
+            echo  "ID " . $orders["ID"] . " CustID: " .  $orders["CustID"] . " Time: " . $orders["Time"] . " Anzahl: " . $orders["Quantity"] . " ProductID: " . $orders["ProductID"] . " Titel: " . $orders["Title"] . $orders["Status"];
             echo "<br>";
         }*/
 
@@ -61,7 +62,9 @@ class Admin extends Page
     }
     protected function getViewData_orders()
     {
-        $sql = "SELECT ID, CustID, Time FROM Bestellung";
+        $sql = "SELECT DISTINCT b.ID FROM Bestellung b
+        INNER JOIN ordered_products o ON (o.fOrderID = b.ID)
+        WHERE o.Status < 3";
 
         $Recordset = $this->_database->query($sql);
         $Orders = array();
@@ -70,12 +73,8 @@ class Admin extends Page
             $Record = $Recordset->fetch_assoc();
             while ($Record) {
                 $ID = htmlspecialchars($Record["ID"], ENT_QUOTES);
-                $CustID = htmlspecialchars($Record["CustID"], ENT_QUOTES);
-                $Time = htmlspecialchars($Record["Time"], ENT_QUOTES);
                 $Orders[] = [
                     "ID" => $ID,
-                    "CustID" => $CustID,
-                    "Time" => $Time,
                 ];
                 $Record = $Recordset->fetch_assoc();
             }
@@ -94,11 +93,7 @@ class Admin extends Page
         //echo $_SESSION["orderID"];
 
         echo <<<HTML
-        <!-- <script type="text/javascript">
-            setTimeout(function(){
-                 window.location.reload(1);
-            }, 5000);
-        </script> -->
+
     <section class="container">
         <h2 id="header">privater Bereich</h2>
         <button class="accordion">Sushi-Meister</button>
@@ -120,8 +115,8 @@ HTML;
                 } else {
                     $this->insert_tablerow($order["ID"], $x);
                 }
-            } else if (isset($_SESSION["orderID"])) {
-                if ($order["ID"] == $_SESSION["orderID"]) {
+            } else if (isset($_SESSION["Admin_orderID"])) {
+                if ($order["ID"] == $_SESSION["Admin_orderID"]) {
                     $this->insert_order_ckd($order["ID"], $x, $ck);
                 } else {
                     $this->insert_tablerow($order["ID"], $x);
@@ -143,15 +138,15 @@ HTML;
         <form action="admin.php" id="formid" method="POST">
             <input   name = "Bestellung"  type = "hidden"  value= '{$_SESSION["selectID"]}'/>
 HTML;
-        } else if (isset($_SESSION["orderID"])) {
+        } else if (isset($_SESSION["Admin_orderID"])) {
             echo <<<HTML
             </ul>
 </section> 
         <section class="right-area"> 
-        <h4 id="status-title">Status: #{$_SESSION["orderID"]} Bestellung</h4>
+        <h4 id="status-title">Status: #{$_SESSION["Admin_orderID"]} Bestellung</h4>
         <section id ="order-item-status">
         <form action="admin.php" id="formid" method="POST">
-            <input   name = "Bestellung"  type = "hidden"  value= '{$_SESSION["orderID"]}'/>
+            <input   name = "Bestellung"  type = "hidden"  value= '{$_SESSION["Admin_orderID"]}'/>
 HTML;
         } else {
             echo <<<HTML
@@ -173,12 +168,23 @@ HTML;
         $csk += 4;
     };*/
 
-    $selectId = $_SESSION["selectID"];
-    echo <<<HTML
-    <script>
-    getOrder($selectId);
-    </script>
+
+    if(isset($_SESSION["selectID"]) && isset($_SESSION["Admin_orderID"])){
+        $selectId = $_SESSION["selectID"];
+        echo <<<HTML
+        <script>
+        getOrder($selectId);
+        </script>
 HTML;
+    }else if(isset($_SESSION["Admin_orderID"])){
+        $orderId = $_SESSION["Admin_orderID"];
+        echo <<<HTML
+        <script>
+        getOrder($orderId);
+        </script>
+HTML;
+    }
+   
 
         /*if (isset($_SESSION["selectID"])) {
             echo <<<HTML
@@ -316,6 +322,11 @@ HTML;
     protected function processReceivedData()
     {
         parent::processReceivedData();
+        $Orders = $this->getViewData_orders();
+        if (empty($Orders)) {
+            unset($_SESSION["selectID"]);
+            unset($_SESSION["Admin_orderID"]);
+        }
 
         if (isset($_POST["Bestellung"])) {
             $_SESSION["selectID"] = $_POST["Bestellung"];

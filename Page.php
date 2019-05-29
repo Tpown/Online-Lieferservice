@@ -103,17 +103,17 @@ abstract class Page
             case ("Sushi - Admin"):
             $tmp2 = "active-menu";
             $css = "admin";
-            $js = "<script src=\"./js/admin.js\" async></script>";
+            $js = "<script src=\"./js/admin.js\"></script>";
             break;
             case ("Sushi - Lieferant"):
             $tmp5 = "active-menu";
             $css = "delivery";
-            $js = "<script src=\"./js/delivery.js\" async></script>";
+            $js = "<script src=\"./js/delivery.js\"></script>";
             break;
             case ("Sushi - Lieferstatus"):
             $tmp3 = "active-menu";
             $css = "admin";
-            $js = "<script src=\"./js/admin.js\" async></script>";
+            $js = "<script src=\"./js/admin.js\"></script>";
             break;
             case ("Sushi - Warenkorb"):
             $tmp4 = "active-menu";

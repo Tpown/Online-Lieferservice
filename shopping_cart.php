@@ -175,6 +175,8 @@ HTML;
 
                 /**Setting SESSIONs */
                 $_SESSION["orderID"] = $orderID; 
+                $_SESSION["Admin_orderID"] = $orderID;
+                $_SESSION["Delivery_orderID"] = $orderID;
                // echo $_SESSION["orderID"];
 
 

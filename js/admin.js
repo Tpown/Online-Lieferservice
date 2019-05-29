@@ -6,10 +6,12 @@ function myFunction() {
       x.className = "top-navbar";
     }
   }
-  
+
+var intervalID
 function getOrder(orderID) {
     "use strict";
     var xhr = new XMLHttpRequest();
+    clearInterval(intervalID) 
     xhr.open('GET', 'http://127.0.0.1/Webseite/CustomerStatus.php');
 
     xhr.onreadystatechange = function () {
@@ -22,19 +24,19 @@ function getOrder(orderID) {
             })
             console.log(filtered_response);
             
-         /*   var isTrue = false;
+            var isTrue = false;
             for(var i = 0; i < filtered_response.length; ++i){
-                if(filtered_response[i].Status == 3){
+                if(filtered_response[i].Status > 2){
                     isTrue = true;
                 }else{
+                    isTrue = false;
                     break;
                 }
             }
 
             if(isTrue){
-
-            }*/
-
+                
+            }
             remove_allChilds(); 
             status_title(orderID);
 
@@ -44,6 +46,10 @@ function getOrder(orderID) {
         }
 
     }
+    intervalID = setInterval(function(){
+        xhr.open('GET', 'http://127.0.0.1/Webseite/CustomerStatus.php');
+        xhr.send();
+   }, 10000);
     xhr.send();
 }
 
