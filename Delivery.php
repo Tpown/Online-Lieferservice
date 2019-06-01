@@ -6,7 +6,6 @@ class Admin extends Page
     protected function __construct()
     {
         parent::__construct();
-        // to do: instantiate members representing substructures/blocks
     }
 
     protected function __destruct()
@@ -74,10 +73,6 @@ HTML;
 
         /*------------------------------INSERT Orders--------------------------------------------------------*/
 
-       /* echo $_SESSION["orderID"];
-        echo $_SESSION["Delivery_orderID"];
-        echo $_SESSION["selectID"];*/
-
         $x = 1;
         $ck = "checked";
         foreach ($Orders as $order) {
@@ -110,12 +105,20 @@ HTML;
 HTML;
 
         if (isset($_SESSION["selectID"])) {
+            $isTrue = false;
             $selectId = $_SESSION["selectID"];
-            echo <<<HTML
+            foreach ($Orders as $order) {
+                if ($order["ID"] == $selectId) {
+                    $isTrue = true;
+                };
+            }
+            if ($isTrue) {
+                echo <<<HTML
             <script type="text/javascript">
               getOrder($selectId);
             </script>
 HTML;
+            }
         } else if (isset($_SESSION["Delivery_orderID"])) {
             $deliveryOrderID = $_SESSION["Delivery_orderID"];
             echo <<<HTML
@@ -123,8 +126,8 @@ HTML;
              getOrder($deliveryOrderID);
             </script>
 HTML;
-        }else{
-            foreach($Orders as $order) {
+        } else {
+            foreach ($Orders as $order) {
                 echo $order['ID'], '<br>';
             }
         };
@@ -223,19 +226,20 @@ HTML;
     {
         parent::processReceivedData();
         $Orders = $this->getViewData_orders();
-        echo $_SESSION["selectID"];
-        if(in_array($_SESSION["selectID"], $Orders, true)){
-            echo "test";
-        }
-        echo $_SESSION["selectID"];
 
+        //  echo $_SESSION["selectID"];
+
+        if (empty($Orders)) {
+            unset($_SESSION["selectID"]);
+            unset($_SESSION["Delivery_orderID"]);
+        }
 
         if (isset($_POST["Bestellung"])) {
 
             $_SESSION["selectID"] = $_POST["Bestellung"];
+
             $OrderID = $this->_database->real_escape_string($_POST["Bestellung"]);
-          
-            //echo "BestellID: " . $OrderID . "<br>";
+
             for ($i = 1; $i <= 4; ++$i)
                 if (isset($_POST["item$i"])) {
                     $item = $_POST["item$i"];
@@ -243,13 +247,6 @@ HTML;
                     $sql = "UPDATE ordered_products SET Status=\"$sql_item\" WHERE fOrderID = \"$OrderID\" AND fProductID = \"$i\"";
                     $this->_database->query($sql);
 
-                   /* if (empty($Orders)) {
-                        unset($_SESSION["selectID"]);
-                        unset($_SESSION["Delivery_orderID"]);
-                    }else if(!in_array($_SESSION["selectID"], $Orders["ID"]) || !in_array($_SESSION["Delivery_orderID"], $Orders["ID"])){
-                        unset($_SESSION["selectID"]);
-                        unset($_SESSION["Delivery_orderID"]);
-                    }*/
                     header('Location: http://127.0.0.1/Webseite/Delivery.php');
                 }
         }

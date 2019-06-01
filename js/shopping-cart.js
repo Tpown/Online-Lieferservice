@@ -1,3 +1,5 @@
+document.getElementById("btn-pay").disabled = true;
+ 
 function myFunction() {
     "use strict";
     var x = document.getElementById("myTopnav");
@@ -109,6 +111,13 @@ function addItemToCart(title, price, quantity) {
         var input = quantityInputs[i]
         input.addEventListener('change', quantityChanged)
     }
+
+    var shoppingcart = document.getElementById("shoppingcart-items");
+    if(shoppingcart.hasChildNodes()){
+        document.getElementById("btn-pay").disabled = false;
+        console.log("hallo")
+    }
+
    
 }
 
@@ -129,4 +138,7 @@ function updateCartTotal() {
     document.getElementsByClassName('cart-total-price')[0].innerText = total + '€'
     document.getElementsByClassName('cart-total-price-input')[0].setAttribute("value", total)
 }
+
+
+ 
 

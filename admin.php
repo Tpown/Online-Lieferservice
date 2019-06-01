@@ -53,7 +53,7 @@ class Admin extends Page
 
         array_multisort(array_column($Orders, 'ID'), SORT_ASC, $Orders);
 
-      /*   foreach ($Orders as $orders) {
+        /*   foreach ($Orders as $orders) {
             echo  "ID " . $orders["ID"] . " CustID: " .  $orders["CustID"] . " Time: " . $orders["Time"] . " Anzahl: " . $orders["Quantity"] . " ProductID: " . $orders["ProductID"] . " Titel: " . $orders["Title"] . $orders["Status"];
             echo "<br>";
         }*/
@@ -128,27 +128,6 @@ HTML;
         };
         /*--------------------------------------------------------------------------------------------------*/
 
-        if (isset($_SESSION["selectID"])) {
-            echo <<<HTML
-            </ul>
-</section> 
-        <section class="right-area"> 
-        <h4 id="status-title">Status: #{$_SESSION["selectID"]} Bestellung</h4>
-        <section id ="order-item-status">
-        <form action="admin.php" id="formid" method="POST">
-            <input   name = "Bestellung"  type = "hidden"  value= '{$_SESSION["selectID"]}'/>
-HTML;
-        } else if (isset($_SESSION["Admin_orderID"])) {
-            echo <<<HTML
-            </ul>
-</section> 
-        <section class="right-area"> 
-        <h4 id="status-title">Status: #{$_SESSION["Admin_orderID"]} Bestellung</h4>
-        <section id ="order-item-status">
-        <form action="admin.php" id="formid" method="POST">
-            <input   name = "Bestellung"  type = "hidden"  value= '{$_SESSION["Admin_orderID"]}'/>
-HTML;
-        } else {
             echo <<<HTML
             </ul>
 </section> 
@@ -158,63 +137,36 @@ HTML;
         <form action="Delivery.php" id="formid" method="POST">
             <input   name = "Bestellung"  type = "hidden"/>
 HTML;
-        }
+
 
         /*---------------------------------INSERT ITEMS FOR ORDER-----------------------------------------------------------------*/
-        /*   
-        $csk = 0;
-        for($i = 0; $i < 4 ; ++$i){
-        $this->insert_order_items($csk);
-        $csk += 4;
-    };*/
-
-
-    if(isset($_SESSION["selectID"]) && isset($_SESSION["Admin_orderID"])){
-        $selectId = $_SESSION["selectID"];
-        echo <<<HTML
-        <script>
-        getOrder($selectId);
-        </script>
+       
+        if (isset($_SESSION["selectID"])) {
+            $isTrue = false;
+            $selectId = $_SESSION["selectID"];
+            foreach ($Orders as $order) {
+                if ($order["ID"] == $selectId) {
+                    $isTrue = true;
+                };
+            }
+            if ($isTrue) {
+                echo <<<HTML
+                <script>
+                getOrder($selectId);
+                </script>
 HTML;
-    }else if(isset($_SESSION["Admin_orderID"])){
-        $orderId = $_SESSION["Admin_orderID"];
-        echo <<<HTML
+            }
+        } else if (isset($_SESSION["Admin_orderID"])) {
+            $orderId = $_SESSION["Admin_orderID"];
+            echo <<<HTML
         <script>
         getOrder($orderId);
         </script>
 HTML;
-    }
-   
+        }
 
-        /*if (isset($_SESSION["selectID"])) {
-            echo <<<HTML
-        <script type="text/javascript">
-          getOrder({$_SESSION["selectID"]});
-        </script>
-HTML;
-        } else if (isset($_SESSION["orderID"])) {
-            echo <<<HTML
-        <script type="text/javascript">
-          getOrder({$_SESSION["orderID"]});
-        </script>
-HTML;
-        };
-*/
-        /*  $count = 0;
-        foreach ($ordered_products as $products) {
-            if(isset($_SESSION["selectID"])){
-                if ($products["ID"] == $_SESSION["selectID"]) {
-                    $this->insert_tablerow_items($products["Title"], $count, $products["Quantity"], $products["ProductID"], $products["Status"]);
-                    $count += 4;
-                    ++$x;
-                }
-            }else if (isset($_SESSION["orderID"]))
-                if ($products["ID"] == $_SESSION["orderID"]) {
-                    $this->insert_tablerow_items($products["Title"], $count, $products["Quantity"], $products["ProductID"], $products["Status"]);
-                    $count += 4;
-                    ++$x;
-                }
-        }*
+
+       
         /*--------------------------------------------------------------------------------------------------*/
         echo <<<HTML
         </form>
@@ -261,8 +213,6 @@ HTML;
                 break;
         }
 
-
-        /** Status switch case code TBD */
         echo <<<HTML
         <h6  id="product"> Anzahl: $entry3    |    Produkt: $entry1 </h6>
         <ul class="checkbox-items"> 
@@ -331,13 +281,10 @@ HTML;
         if (isset($_POST["Bestellung"])) {
             $_SESSION["selectID"] = $_POST["Bestellung"];
             $OrderID = $this->_database->real_escape_string($_POST["Bestellung"]);
-            //echo "BestellID: " . $OrderID . "<br>";
             for ($i = 1; $i <= 4; ++$i)
                 if (isset($_POST["item$i"])) {
                     $item = $_POST["item$i"];
                     $sql_item = $this->_database->real_escape_string($item);
-                    /* echo "Status: " . $sql_item . "<br>";
-                echo "fProductID: " . $i . "<br>";*/
                     $sql = "UPDATE ordered_products SET Status=\"$sql_item\" WHERE fOrderID = \"$OrderID\" AND fProductID = \"$i\"";
                     $this->_database->query($sql);
                     header('Location: http://127.0.0.1/Webseite/admin.php');

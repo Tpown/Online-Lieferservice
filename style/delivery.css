@@ -209,6 +209,17 @@ input[type="radio"]:checked + .status{
     justify-content: flex-start;
 }
 
+@media (max-width: 1000px){
+    .checkbox-items {
+        flex-direction: column;
+    }
+    .status{
+        width: 45%;
+        text-align: center;
+    }
+}
+
+
 input[type=radio]{
     display: none;
 }
