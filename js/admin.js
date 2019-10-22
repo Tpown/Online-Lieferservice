@@ -49,7 +49,7 @@ function getOrder(orderID) {
     intervalID = setInterval(function(){
         xhr.open('GET', 'http://127.0.0.1/Webseite/CustomerStatus.php');
         xhr.send();
-   }, 1000000);
+   }, 5000);
     xhr.send();
 }
 

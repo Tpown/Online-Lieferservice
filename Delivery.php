@@ -71,7 +71,7 @@ class Admin extends Page
                 <ul class="itemlist"> 
 HTML;
 
-        /*------------------------------INSERT Orders--------------------------------------------------------*/
+        /*------------------------------INSERT Orders Overview--------------------------------------------------------*/
 
         $x = 1;
         $ck = "checked";
@@ -126,12 +126,7 @@ HTML;
              getOrder($deliveryOrderID);
             </script>
 HTML;
-        } else {
-            foreach ($Orders as $order) {
-                echo $order['ID'], '<br>';
-            }
         };
-
         echo <<<HTML
         </form>
             </section>

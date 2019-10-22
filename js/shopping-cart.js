@@ -37,6 +37,7 @@ function removeItem(event){
     var button = event.target
     button.parentElement.parentElement.remove()
     updateCartTotal()
+    disableButton()
 }
 
 function removeAll(){
@@ -47,6 +48,7 @@ function removeAll(){
         sc_items.removeChild(sc_items.firstChild);
     }
     updateCartTotal();
+    disableButton();
 }
 
 
@@ -112,13 +114,19 @@ function addItemToCart(title, price, quantity) {
         input.addEventListener('change', quantityChanged)
     }
 
+   disableButton();
+
+   
+}
+
+function disableButton(){
+    "use strict";
     var shoppingcart = document.getElementById("shoppingcart-items");
     if(shoppingcart.hasChildNodes()){
         document.getElementById("btn-pay").disabled = false;
-        console.log("hallo")
+    }else{
+        document.getElementById("btn-pay").disabled = true;
     }
-
-   
 }
 
 function updateCartTotal() {
